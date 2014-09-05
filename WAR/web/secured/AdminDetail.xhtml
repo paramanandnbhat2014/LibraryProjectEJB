@@ -1,0 +1,263 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="./SecuredMaster.xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns="http://www.w3.org/1999/xhtml">
+    <ui:define name="title">
+        <title>Admin Detail</title>
+    </ui:define>
+
+    <ui:define name="article">
+        <h1><h:outputText value="Displaying Customers"/></h1>
+        <div class="tableArea">
+            <h:dataTable value="#{customerController.customers}" var="item">
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="User Id"/>
+                    </f:facet>
+                    <h:outputText value="#{item.custId}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="UserName"/>
+                    </f:facet>
+                    <h:outputText value="#{item.userName}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Password"/>
+                    </f:facet>
+                    <h:outputText value="#{item.passWord}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Full Name"/>
+                    </f:facet>
+                    <h:outputText value="#{item.fullName}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Phone"/>
+                    </f:facet>
+                    <h:outputText value="#{item.phone}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Email"/>
+                    </f:facet>
+                    <h:outputText value="#{item.email}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Account Type"/>
+                    </f:facet>
+                    <h:outputText value="#{item.isAdmin ? 'Aministrator' : 'Normal User' }"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Actions"/>
+                    </f:facet>
+                    <h:commandButton styleClass="edit" action="#{customerController.read(item)}" value="Edit" />
+                    <h:commandButton styleClass="edit" action="#{customerController.delete(item)}" value="Delete" />
+                </h:column>
+            </h:dataTable>
+        </div>
+        <hr />
+        <h:commandButton styleClass="add" action="#{customerController.setupCreate()}" value="Add new customer" />
+        <br /><br />
+
+        <h1><h:outputText value="Displaying Books"/></h1>
+        <div class="tableArea">
+            <h:dataTable value="#{bookController.getBooks()}" var="item">
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Category Id and Title"/>
+                    </f:facet>
+                    <h:outputText value=" || " />
+                    <ui:repeat var="cate" value="#{item.categories}" varStatus="status">
+                        <h:outputText value="#{cate.ctgyId} =>  " rendered="#{status.index + 1 lt item.categories.size()}"/>
+                        <h:outputText value="#{cate.ctgyId} =>  " rendered="#{status.index + 1 eq item.categories.size()}"/>
+                        <!-- Output without comma since last index -->
+                        <h:outputText value="#{cate.ctgyTitle}" rendered="#{status.index + 1 lt item.categories.size()}"/>
+                        <h:outputText value="#{cate.ctgyTitle}" rendered="#{status.index + 1 eq item.categories.size()}"/>
+                        <h:outputText value=" || " />
+                    </ui:repeat>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Book Id"/>
+                    </f:facet>
+                    <h:outputText value="#{item.bookId}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Title"/>
+                    </f:facet>
+                    <h:outputText value="#{item.title}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Author"/>
+                    </f:facet>
+                    <h:outputText value="#{item.author}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Publisher"/>
+                    </f:facet>
+                    <h:outputText value="#{item.publisher}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="PubDate"/>
+                    </f:facet>
+                    <h:outputText value="#{item.pubDate}">
+                        <f:convertDateTime pattern="d-M-yyyy" />
+                    </h:outputText>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="ISBN"/>
+                    </f:facet>
+                    <h:outputText value="#{item.ISBN}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="description"/>
+                    </f:facet>
+                    <h:outputText value="#{item.description}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="AvailableStatus"/>
+                    </f:facet>
+                    <h:outputText value="#{item.availableStatus ? 'Available' : 'Not Available'}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Actions"/>
+                    </f:facet>
+                    <h:commandButton styleClass="edit" action="#{bookController.read(item)}" value="Edit" />
+                    <h:commandButton styleClass="edit" action="#{bookController.delete(item)}" value="Delete" />
+                </h:column>
+            </h:dataTable>
+        </div>
+        <hr />
+        <h:commandButton styleClass="add" action="#{bookController.setupCreate()}" value="Add new book" />
+        <br /><br />
+
+        <h1><h:outputText value="Displaying Categories"/></h1>
+        <div class="tableArea">
+            <h:dataTable value="#{categoryController.getCategories()}" var="item">
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Id"/>
+                    </f:facet>
+                    <h:outputText value="#{item.ctgyId}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Title"/>
+                    </f:facet>
+                    <h:outputText value="#{item.ctgyTitle}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Actions"/>
+                    </f:facet>
+                    <h:commandButton styleClass="edit" action="#{categoryController.read(item)}" value="Edit" />
+                    <h:commandButton styleClass="edit" action="#{categoryController.delete(item)}" value="Delete" />
+                </h:column>
+            </h:dataTable>
+        </div>
+        <hr />
+        <h:commandButton styleClass="add" action="#{categoryController.setupCreate()}" value="Add new category" />
+        <br /><br />
+        <br/>
+        <br/>
+
+        <h1><h:outputText value="All Loans"/></h1>
+        <div class="tableArea">
+            <h:dataTable value="#{bookController.getAllLoans()}" var="loan">
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Loan Id"/>
+                    </f:facet>
+                    <h:outputText value="#{loan.loanId}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Book Title"/>
+                    </f:facet>
+                    <h:outputText value="#{loan.book.title}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Customer Name"/>
+                    </f:facet>
+                    <h:outputText value="#{loan.customer.userName}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Borrow Date"/>
+                    </f:facet>
+                    <h:outputText value="#{loan.borrowDate}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Return Status"/>
+                    </f:facet>
+                    <h:outputText value="#{loan.returnStatus ? 'Aleady return' : 'Being borrowed'}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Return Date"/>
+                    </f:facet>
+                    <h:outputText value="#{loan.returnDate}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Actions"/>
+                    </f:facet>
+                    <h:commandButton styleClass="edit" action="#{bookController.deleteLoan(loan)}" value="Cancel" />
+                </h:column>
+            </h:dataTable>
+        </div>
+        <hr />
+        <br/>
+        <br/>
+
+
+
+        <h3>All comments</h3>
+        <hr />
+        <ui:repeat value="#{accountDetailController.getComments()}" var="comment" varStatus="Status">
+            <div id="commentbox">
+                <div id="commenttitle">
+                    <span>Book Title: #{comment.book.title}</span>
+                    <div>
+                        posted at
+                        <h:outputText value="#{comment.postDate}" >
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss"/>
+                        </h:outputText>
+                    </div>
+                </div>
+                <div id="commentcontent">
+                    #{comment.customer.userName} &nbsp;
+                    said:&nbsp;&nbsp;
+                    <h:outputText value="'#{comment.commInfo}.'" />
+                    <h:commandButton styleClass="edit" action="#{accountDetailController.delete(comment)}" value="Delete" />
+                    <h:commandButton styleClass="edit" action="#{accountDetailController.edit(comment)}" value="Edit" />
+                </div>
+            </div>
+        </ui:repeat>
+    </ui:define>
+
+</ui:composition>
+

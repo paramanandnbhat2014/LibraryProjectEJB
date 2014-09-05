@@ -1,0 +1,96 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="./MasterPage.xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns="http://www.w3.org/1999/xhtml">
+    <ui:define name="title">
+        <title>Category</title>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $(".panel1").slideUp("fast");
+                $(".flip1").click(function() {
+                    $(".panel1").slideToggle("slow");
+                });
+            });
+        </script>
+    </ui:define>
+
+    <ui:define name="article">
+        <div class="articleArea">
+            <h:panelGrid id="repeat-panel" columns="1">
+                <h3> Category List</h3>
+                <p><strong>click</strong> each category, <strong>view</strong> more...</p>
+                <br />
+                <ui:repeat value="#{bookController.categories}" var="item" varStatus="cateStatus">
+                    <div class="clearboth">
+                        <div class="flip1">
+                            <strong> <h:outputText value="#{item.ctgyTitle}"/></strong>                 
+                            <hr />
+                        </div>
+                        <div class="panel1">
+                            <ui:repeat var="book" value="#{item.books}" varStatus="status">
+                                <div class="lastestbook">
+                                    <div id="bookimg">
+                                        <h:link outcome="/faces/BookDetail.xhtml">
+                                            <h:graphicImage value="#{book.imgURL}" />
+                                            <f:param name="pageFrom" value="books"></f:param>
+                                            <f:param name="cateID" value="#{cateStatus.index}"></f:param>
+                                            <f:param name="bookID" value="#{status.index}"></f:param>
+                                        </h:link>
+
+                                    </div>
+                                    <div id="booktext">
+                                        <h:link value="#{book.title}" outcome="/faces/BookDetail.xhtml">
+                                            <f:param name="pageFrom" value="books"></f:param>
+                                            <f:param name="cateID" value="#{cateStatus.index}"></f:param>
+                                            <f:param name="bookID" value="#{status.index}"></f:param>
+                                        </h:link>
+                                        <p> Author: <strong> #{book.author} </strong> </p>
+                                        <p> Publisher: <strong> #{book.publisher} </strong> </p>
+                                        <p> ISBN: <strong> #{book.ISBN} </strong> </p>
+                                        <p> Status: <strong> #{book.availableStatus ? "Available" : "Not Available" } </strong> </p>
+                                    </div>
+                                    <div id="bookViewDetail">
+                                        <h:commandButton value="View Detail" 
+                                                         action="/faces/BookDetail.xhtml">
+                                            <f:param name="pageFrom" value="books"></f:param>
+                                            <f:param name="cateID" value="#{cateStatus.index}"></f:param>
+                                            <f:param name="bookID" value="#{status.index}"></f:param>
+                                        </h:commandButton>
+                                    </div>
+                                </div>
+                            </ui:repeat>
+                        </div>
+                    </div>
+                </ui:repeat>
+            </h:panelGrid>
+        </div>
+        <div class="sidebar">
+            <div class="titlebox">
+                <h4>Library Branch Openings</h4>
+                <hr />
+            </div>
+            <div class="contentbox">
+                <h5>Monash Caufield Library</h5>
+                <p> Opening Time: 8am - 9pm, Mon - Fri</p>
+                <br/>
+                <h5>Monash Clayton Library</h5>
+                <p> Opening Time: 8am - 9pm, Mon - Fri</p>
+                <br/>
+                <h5>Monash City Library</h5>
+                <p> Opening Time: 8am - 8pm, Mon - Fri</p>
+                <br/>
+                <h5>Monash Gispland Library</h5>
+                <p> Opening Time: 9am - 9pm, Mon - Fri</p>
+                <br/>
+            </div>
+        </div>
+        <br class="clearboth"/>
+        <br /><br />
+
+    </ui:define>
+
+</ui:composition>
+

@@ -1,0 +1,170 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="./SecuredMaster.xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns="http://www.w3.org/1999/xhtml">
+    <ui:define name="title">
+        <title>Account Detail</title>
+    </ui:define>
+
+    <ui:define name="article">
+        <f:view>
+            <h:form>
+                <h3>My Profile</h3>
+                <h1><h:outputText value="Borrow History"/></h1>
+                <hr />
+                <div class="tableArea">
+                    <h:dataTable value="#{accountDetailController.getLoans().loans}" var="item">
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Book ID"/>
+                            </f:facet>
+                            <h:outputText value="#{item.book.bookId}" rendered="#{!item.returnStatus}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Book Name"/>
+                            </f:facet>
+                            <h:outputText value="#{item.book.title}" rendered="#{!item.returnStatus}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Borrow Date"/>
+                            </f:facet>
+                            <h:outputText value="#{item.borrowDate}" rendered="#{!item.returnStatus}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Expected Return Date"/>
+                            </f:facet>
+                            <h:outputText value="#{item.returnDate}" rendered="#{!item.returnStatus}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Period"/>
+                            </f:facet>
+                            <h:outputText value="Within two weeks" rendered="#{!item.returnStatus}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Return Status"/>
+                            </f:facet>
+                            <h:outputText value="#{item.returnStatus? 'Yes':'No'}" rendered="#{!item.returnStatus}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Actions"/>
+                            </f:facet>
+                            <h:commandButton styleClass="edit" action="#{accountDetailController.returnBook(item)}" value="Return" rendered="#{!item.returnStatus}"/>
+                        </h:column>
+                    </h:dataTable>
+                </div>
+                <br />
+                <br />
+                <h1><h:outputText value="Return History"/></h1>
+                <hr/>
+                <div class="tableArea">
+                    <h:dataTable value="#{accountDetailController.getLoans().loans}" var="item">
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Book ID"/>
+                            </f:facet>
+                            <h:outputText value="#{item.book.bookId}" rendered="#{item.returnStatus}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Book Name"/>
+                            </f:facet>
+                            <h:outputText value="#{item.book.title}" rendered="#{item.returnStatus}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Borrow Date"/>
+                            </f:facet>
+                            <h:outputText value="#{item.borrowDate}" rendered="#{item.returnStatus}">
+                                <f:convertDateTime pattern="dd/MM/yyyy  HH:mm"/>
+                            </h:outputText>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Autual Return Date"/>
+                            </f:facet>
+                            <h:outputText value="#{item.returnDate}" rendered="#{item.returnStatus}">
+                                <f:convertDateTime pattern="dd/MM/yyyy  HH:mm"/>
+                            </h:outputText>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Return Status"/>
+                            </f:facet>
+                            <h:outputText value="#{item.returnStatus? 'Yes':'No'}" rendered="#{item.returnStatus}"/>
+                        </h:column>
+                    </h:dataTable>
+                </div>
+                <br />
+                <br />
+                <h1><h:outputText value="My Comments"/></h1>
+                <hr/>
+
+                <ui:repeat value="#{accountDetailController.getComment().comments}" var="comment" varStatus="Status">
+                    <div id="commentbox">
+                        <div id="commenttitle">
+                            <span>Book Title: #{comment.book.title} </span>
+                            <div>
+                                posted at
+                                <h:outputText value="#{comment.postDate}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss"/>
+                                </h:outputText>
+                            </div>
+                        </div>
+                        <div id="commentcontent">
+                            <strong>I said:</strong>
+                            <h:outputText value="#{comment.commInfo}" />
+                            <h:commandButton styleClass="edit" action="#{accountDetailController.delete(comment)}" value="Delete" />
+                        </div>
+                    </div>
+                </ui:repeat>
+                <br />
+                <br />
+                <h1><h:outputText value="My Favourite Books"/></h1>
+                <hr />
+                <div class="tableArea">
+                    <h:dataTable value="#{accountDetailController.getBookmark().books}" var="favbook">
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Book ID"/>
+                            </f:facet>
+                            <h:outputText value="#{favbook.bookId}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Book Title"/>
+                            </f:facet>
+                            <h:outputText value="#{favbook.title}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Book Author"/>
+                            </f:facet>
+                            <h:outputText value="#{favbook.author}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Action"/>
+                            </f:facet>
+                            <h:commandButton styleClass="edit" action="#{accountDetailController.deleteOneBookmark(favbook)}" value="Unlike">
+                            </h:commandButton>
+                        </h:column>
+                    </h:dataTable>
+                </div>
+            </h:form>
+        </f:view>
+    </ui:define>
+</ui:composition>
+

@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="./SecuredMaster.xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns="http://www.w3.org/1999/xhtml">
+    <ui:define name="title">
+        <title>Edit Book</title>
+        <h:outputStylesheet name="css/datepicker.css" />
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+        </script>
+        <script src="./resources/js/jquery-1.9.1.js" type="text/javascript">
+        </script>
+        <script src="./resources/js/jquery-ui-1.10.3.custom.js" type="text/javascript">
+        </script>
+        <script src="./resources/js/jquery-ui-1.10.3.custom.min.js" type="text/javascript">
+        </script>
+        <script src="./resources/js/jquery.ui.datepicker.js" type="text/javascript">
+        </script>
+        <script src="./resources/js/bootstrap-datepicker.js" type="text/javascript">
+        </script>
+    </ui:define>
+
+    <ui:define name="article">
+        <div>
+            <h1><h:outputText value="Create/Edit book"/></h1>
+            <h:message for="pubDate" style="color:red" />
+            <h:panelGrid columns="2">
+
+                <h:outputLabel value="Title:" for="title2" />
+                <h:inputText id="title2" value="#{bookController.book.title}" title="title" required="true" requiredMessage="Hint:  TItle required"/>
+                <h:outputLabel value="author:" for="author2" />
+                <h:inputText id="author2" value="#{bookController.book.author}" title="author" required="true" requiredMessage="Hint:  Author required"/>
+                <h:outputLabel value="publisher:" for="publisher2" />
+                <h:inputText id="publisher2" value="#{bookController.book.publisher}" title="publisher" required="true" requiredMessage="Hint:  Publisher required"/>
+                <h:outputLabel value="pubDate:" for="pubDate" />
+                <h:inputText id="pubDate" value="#{bookController.book.pubDate}" title="pubDate">
+                    <f:convertDateTime pattern="d-M-yyyy" />
+                </h:inputText>
+                <h:outputLabel value="ISBN:" for="ISBN" />
+                <h:inputText id="ISBN" value="#{bookController.book.ISBN}" title="ISBN" />
+                <h:outputLabel value="description:" for="description" />
+                <h:inputText id="description" value="#{bookController.book.description}" title="description" />
+                <h:outputLabel value="imgURL:" for="imgURL" />
+                <h:inputText id="imgURL" value="#{bookController.book.imgURL}" title="imgURL" />
+                <h:outputLabel value="AvailableStatus:" for="AvailableStatus" />
+                <h:selectBooleanCheckbox id="AvailableStatus" value="#{bookController.book.availableStatus}" />
+            </h:panelGrid>
+            <h:panelGrid columns="2">
+                <h:selectManyCheckbox value="#{bookController.categoriesIdPicked}" >
+                    <f:selectItems value="#{bookController.allCategories}" var="item" itemLabel="#{item.ctgyTitle}" itemValue="#{item.ctgyId}"/>
+                </h:selectManyCheckbox>
+            </h:panelGrid> 
+            <h:commandButton id="title" styleClass="edit" value="Create" rendered="#{empty bookController.book.bookId}" action="#{bookController.create()}"/>
+            <h:commandButton id="author" styleClass="edit" value="Update" rendered="#{not empty bookController.book.bookId}" action="#{bookController.update()}"/>
+            <h:commandButton id="publisher" styleClass="edit" value="Back" action="/faces/secured/AdminDetail.xhtml"/>
+        </div>
+        <br class="clearboth"/>
+        <h:message for="title2" style="background: #ffff00; color: red;"/><br />
+        <h:message for="author2" style="background: #ffff00; color: red;"/><br />
+        <h:message for="publisher2" style="background: #ffff00; color: red;"/><br />
+    </ui:define>
+
+</ui:composition>

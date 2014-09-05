@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="./MasterPage.xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns="http://www.w3.org/1999/xhtml">
+    <ui:define name="title">
+        <title>Registration</title>
+        <script text="text/javascript">
+            function checkEmail(form) {
+
+                var email = document.getElementById(form.id + ':emails').value;
+                if(email === '1'){
+                    alert("Sensitive term 'sex' not allowed");
+                    return false;}
+                var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                if (!filter.test(email.value)) {
+                    alert('Please provide a valid email address');
+                    //email.focus;
+                    return false;
+                }
+            }
+        </script>
+    </ui:define>
+
+    <ui:define name="article">
+        <div class="signup">
+            <h1><h:outputText value="Sign up"/></h1>
+            <h:panelGrid columns="2">
+                <h:outputLabel value="UserName:" for="username" />
+                <h:inputText id="username" value="#{registrationController.customer.userName}" title="UserName" required="true" requiredMessage="Hint:  User name required"/>
+                <h:outputLabel value="Password:" for="password" />
+                <h:inputSecret id="password" value="#{registrationController.customer.passWord}" title="Password" required="true" requiredMessage="Hint:  Password required"/>
+                <h:outputLabel value="Full Name:" for="fullname" />
+                <h:inputText id="fullname" value="#{registrationController.customer.fullName}" title="FullName" required="true" requiredMessage="Hint:  Full Name required"/>
+                <h:outputLabel value="Phone:" for="phone" />
+                <h:inputText id="phone" value="#{registrationController.customer.phone}" title="Phone" required="true" requiredMessage="Hint:  Phone required"/>
+                <h:outputLabel id="emails" value="Email:" for="email" />
+                <h:inputText id="email" value="#{registrationController.customer.email}" title="Email" required="true" requiredMessage="Hint:  Email required"/>
+                <h:outputLabel value="Is Admin:" for="isAdmin" />
+                <h:selectBooleanCheckbox id="isAdmin" value="#{registrationController.customer.isAdmin}" />
+            </h:panelGrid>
+            <h:commandButton id="back" styleClass='sub' value="Cancel" action="/faces/index.xhtml"/>
+            <h:commandButton id="create" styleClass='sub' value="Sign up" onclick="return checkEmail(form)" action="#{registrationController.create()}"/>
+        </div>
+        <h:message for="username" style="background: #ffff00; margin-left: 430px; color: red;"/><br />
+        <h:message for="password" style="background: #ffff00; margin-left: 430px;color: red;"/><br />
+        <h:message for="fullname" style="background: #ffff00; margin-left: 430px; color: red;"/><br />
+        <h:message for="phone" style="background: #ffff00; margin-left: 430px; color: red;"/><br />
+        <h:message for="email" style="background: #ffff00; margin-left: 430px; color: red;"/>
+
+    </ui:define>
+
+</ui:composition>
+
