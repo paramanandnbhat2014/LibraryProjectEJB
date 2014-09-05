@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="./MasterPage.xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns="http://www.w3.org/1999/xhtml">
+    <ui:define name="title">
+        <title>Search</title>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+        </script> 
+        <script src="./resources/js/bootstrap-tooltip.js" type="text/javascript">
+        </script>
+        <script src="./resources/js/bootstrap-popover.js" type="text/javascript">
+        </script>
+        <script src="./resources/js/bootstrap-scrollspy.js" type="text/javascript">
+        </script>
+        <script>
+            $(function()
+            {
+                $("#form:keyWord").popover();
+                $('#form:submit').popover();
+                $('#navbar').scrollspy();
+            });
+        </script>
+    </ui:define>
+
+    <ui:define name="article">
+        <div id="search-container">
+            <h3>Search Book</h3>
+            <h:selectOneMenu id="selectMenu" styleClass="selectMenu" value="#{searchController.attribute}" >
+                <f:selectItem itemValue="title" itemLabel="Search By Title" />
+                <f:selectItem itemValue="ISBN" itemLabel="Search By ISBN" />
+                <f:selectItem itemValue="author" itemLabel="Search By Author" />
+            </h:selectOneMenu>
+            <h:inputText id="keyWord" styleClass="keyWord" title="Please enter your keyword" 
+                         label="Name" size="32" value="#{searchController.value}" required="true" 
+                         requiredMessage="Hint: You must enter a key word!">
+            </h:inputText> 
+            <h:commandButton id="submit" styleClass="search" value="Search"  title="Click here to search"
+                             action="#{searchController.search()}">
+
+            </h:commandButton>
+        </div>
+        <br/>
+        <h:outputText id="result-message" value="#{searchController.resultMessage}" style="margin-left: 430px;color: red;"/>
+        <div id="scroll" data-spy="scroll" data-target="#navbar" data-offset="50">
+            <h:panelGrid id="repeat-panel" columns="1">
+                <ui:repeat value="#{searchController.books}" var="book" varStatus="status">
+                    <div class="listItem">
+                        <div id="pic">
+                            <h:link outcome="/faces/BookDetail.xhtml">
+                                <h:graphicImage value="#{book.imgURL}" />
+                                <f:param name="pageFrom" value="search"></f:param>
+                                <f:param name="bookID" value="#{status.index}"></f:param>
+                            </h:link>
+
+                        </div>
+                        <div id="text">
+                            <h:link value="#{book.title}" outcome="/faces/BookDetail.xhtml">
+                                <f:param name="pageFrom" value="search"></f:param>
+                                <f:param name="bookID" value="#{status.index}"></f:param>
+                            </h:link>
+                            <p> Author: <strong> #{book.author} </strong> </p>
+                            <p> Publisher: <strong> #{book.publisher} </strong> </p>
+                            <p> ISBN: <strong> #{book.ISBN} </strong> </p>
+                            <p> Status: <strong> #{book.availableStatus ? "Available" : "Not Available" } </strong> </p>
+                        </div>
+
+                        <div id="viewDetail">
+                            <h:commandButton value="View Detail" 
+                                             action="/faces/BookDetail.xhtml">
+                                <f:param name="pageFrom" value="search"></f:param>
+                                <f:param name="bookID" value="#{status.index}"></f:param>
+                            </h:commandButton>
+                        </div>
+                    </div>
+                </ui:repeat>
+            </h:panelGrid>
+            <br /><br /><br />
+            <h:message for="keyWord" style="margin-left: 430px;color: red;"/>
+        </div>
+    </ui:define>
+
+</ui:composition>
+

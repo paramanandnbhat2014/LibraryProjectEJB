@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="./MasterPage.xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns="http://www.w3.org/1999/xhtml">
+    <ui:define name="title">
+        <title>Book Detail</title>
+    </ui:define>
+
+    <ui:define name="article">
+        <div id="bigbox">
+            <div id ="box">
+                <div id="imgbook">
+                    <h:graphicImage value="#{bookDetailController.getCurrentBook().imgURL}" />
+                </div>
+                <div id="txt">
+                    <h3>#{bookDetailController.getCurrentBook().title}</h3>
+                    <ul>
+                        <li>Author: #{bookDetailController.getCurrentBook().author}</li>
+                        <li>Publisher: #{bookDetailController.getCurrentBook().publisher}</li>
+                        <li>Publish Date: #{bookDetailController.getCurrentBook().pubDate}</li>
+                        <li>ISBN: #{bookDetailController.getCurrentBook().ISBN}</li>
+                        <li>Description: #{bookDetailController.getCurrentBook().description}</li>
+                        <li>Category :
+                            <ui:repeat var="category" value="#{bookDetailController.getCurrentBook().categories}" varStatus="status">
+                                <h:outputText value="#{category.ctgyTitle}, " rendered="#{status.index + 1 lt bookDetailController.getCurrentBook().categories.size()}"/>
+                                <h:outputText value="#{category.ctgyTitle}" rendered="#{status.index + 1 eq bookDetailController.getCurrentBook().categories.size()}"/>
+                            </ui:repeat>
+                        </li>
+                        <li>Status: <strong> #{bookDetailController.getCurrentBook().availableStatus ? "Available" : "Not Available" } </strong></li>
+                    </ul>
+                </div>
+                <div id="buttons">
+                    <h:commandButton value="#{bookDetailController.readBookmark()? 'Like':'Unlike'}"  
+                                     action="#{bookDetailController.addBookmark()}">
+                        <f:param name="pageFrom" value="#{bookDetailController.pageFrom}"></f:param>
+                        <f:param name="cateID" value="#{bookDetailController.cateId}"></f:param>
+                        <f:param name="bookID" value="#{bookDetailController.bookId}"></f:param>
+                    </h:commandButton>
+                    <h:commandButton value="Request"  rendered="#{bookDetailController.getCurrentBook().availableStatus}"
+                                     action="#{bookDetailController.doLoan()}">
+                        <f:param name="pageFrom" value="#{bookDetailController.pageFrom}"></f:param>
+                        <f:param name="cateID" value="#{bookDetailController.cateId}"></f:param>
+                        <f:param name="bookID" value="#{bookDetailController.bookId}"></f:param>
+                    </h:commandButton>
+                </div>
+                <div id="txtArea">
+                    <hr/>
+                    <p>Add Your Comment</p>
+                    <h:inputTextarea value="#{bookDetailController.commentInfo}"></h:inputTextarea>
+                </div>
+                <div id="buttonArea">
+                    <h:commandButton value="post comment"  
+                                     action="#{bookDetailController.postComment()}">
+                        <f:param name="pageFrom" value="#{bookDetailController.pageFrom}"></f:param>
+                        <f:param name="cateID" value="#{bookDetailController.cateId}"></f:param>
+                        <f:param name="bookID" value="#{bookDetailController.bookId}"></f:param>
+                    </h:commandButton>
+                </div>
+            </div>
+
+
+            <div id="commentsArea">
+                <h4>All Recent Comments about this book</h4>
+                <hr />
+                <ui:repeat value="#{bookDetailController.book.comments}" var="comment" varStatus="status">
+                    <div id="commentbox">
+                        <div id="commenttitle">
+                            <span>User: #{comment.customer.userName} </span>
+                            <div>
+                                posted at
+                                <h:outputText value="#{comment.postDate}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss"/>
+                                </h:outputText>
+                            </div>
+                        </div>
+                        <div id="commentcontent">
+                            said:
+                            <h:outputText value="#{comment.commInfo}" />
+                        </div>
+                    </div>
+                </ui:repeat>
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>
